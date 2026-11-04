@@ -98,15 +98,6 @@
   box-shadow: inset 3px 0 #4ccaff;
 }
 
-.new-tag {
-  margin-left: auto;
-  font-size: 8px;
-  color: #9b8bff;
-  background: #3b3262;
-  padding: 3px 6px;
-  border-radius: 4px;
-}
-
 .sidebar-spacer {
   flex: 1;
   min-height: 35px;
@@ -157,21 +148,6 @@
   color: #8d9cb0;
   font-size: 8px;
   font-weight: 700;
-}
-
-.health-track {
-  height: 4px;
-  margin-top: 13px;
-  background: #293a4e;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.health-track div {
-  width: 98%;
-  height: 100%;
-  background: #40dba1;
-  border-radius: 5px;
 }
 
 .demo-banner {

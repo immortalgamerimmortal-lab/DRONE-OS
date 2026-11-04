@@ -9,9 +9,10 @@ DRONE OS is a browser-based drone ground-control **simulation prototype**. It do
 - Local mission planner with editable waypoints, route preview, reorder/duplicate/delete, and browser-local persistence.
 - Local telemetry page backed only by samples emitted from the simulator physics, with a bounded in-session history chart.
 - Deterministic local rules assistant for simulation telemetry and physics; selected images remain in-browser as previews and are not analyzed or uploaded.
+- Offline local-coordinate map fallback with mission-route overlay, zoom, recenter/follow, and editable simulated home coordinates.
 - Unit tests for core flight-physics bounds.
 
-The map, flight logs, settings, OpenCV processing, and Python backend are not implemented yet. Their navigation entries are marked unavailable rather than showing fabricated records. PX4/MAVLink and real aircraft control are intentionally not implemented.
+Flight logs, settings, OpenCV processing, and the Python backend are not implemented yet. Their navigation entries are marked unavailable rather than showing fabricated records. PX4/MAVLink and real aircraft control are intentionally not implemented.
 
 ## Run on Windows
 

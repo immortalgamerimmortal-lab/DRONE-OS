@@ -10,11 +10,12 @@
 - Add a browser-local mission planner with waypoint editing, ordering, route preview, and mission duplication/deletion.
 - Add telemetry cards and an in-session chart backed exclusively by physics samples.
 - Add a deterministic local rules assistant with safe, local image preview and no unsupported detection claims.
+- Add an offline local-coordinate map with mission overlay and simulated home-position controls.
 
 ## Remaining work
 
 1. Run frontend tests, lint, and production build in an environment with PowerShell/Node command execution.
-2. Implement connected map and map fallback controls.
+2. Connect map UI to mission persistence and add map interaction tests.
 3. Add a configured backend telemetry connection and persistent historical charts.
 4. Add flight-session persistence, logs, export, and analytics.
 5. Build the isolated FastAPI/SQLite backend and API/WebSocket tests.

@@ -2,6 +2,7 @@ import DroneSimulator from "./simulation/DroneSimulator.jsx";
 import MissionPlanner from "./pages/MissionPlanner.jsx";
 import TelemetryPage from "./pages/TelemetryPage.jsx";
 import AssistantPage from "./pages/AssistantPage.jsx";
+import MapPage from "./pages/MapPage.jsx";
 import { SimulationTelemetryProvider } from "./context/SimulationTelemetryContext.jsx";
 import { useState } from "react";
 import {
@@ -273,7 +274,8 @@ function App() {
           {activeNav === "Mission Planner" && <MissionPlanner />}
           {activeNav === "Live Telemetry" && <TelemetryPage />}
           {activeNav === "AI Assistant" && <AssistantPage />}
-          {!["Overview", "3D Simulator", "Mission Planner", "Live Telemetry", "AI Assistant"].includes(activeNav) && (
+          {activeNav === "Map" && <MapPage />}
+          {!["Overview", "3D Simulator", "Mission Planner", "Live Telemetry", "AI Assistant", "Map"].includes(activeNav) && (
             <section className="panel module-placeholder">
               <span className="simulator-eyebrow">MODULE NOT CONNECTED</span>
               <h2>{activeNav}</h2>

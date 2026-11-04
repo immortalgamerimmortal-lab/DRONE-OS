@@ -10,6 +10,7 @@ frontend/
       MissionPlanner.jsx
       TelemetryPage.jsx
       AssistantPage.jsx
+      MapPage.jsx
     simulation/
       DroneSimulator.jsx
       FlightPhysics.js
@@ -22,7 +23,7 @@ frontend/
 
 ## Data and safety boundaries
 
-The overview values and route graphics are illustrative demo content, not measurements. The telemetry page shows only values produced by the local physics simulation; sensor fields the simulator does not produce are marked unavailable. Mission data is browser-local and is not sent to a server. The assistant uses deterministic local rules, and image selection only creates a local preview; there is no configured vision model. Simulator controls affect only the local 3D scene. There is no backend, external telemetry feed, user location access, or hardware communication layer in this version.
+The overview values and route graphics are illustrative demo content, not measurements. The map uses only local X/Z coordinates and never requests the user's location or online tiles. The telemetry page shows only values produced by the local physics simulation; sensor fields the simulator does not produce are marked unavailable. Mission data is browser-local and is not sent to a server. The assistant uses deterministic local rules, and image selection only creates a local preview; there is no configured vision model. Simulator controls affect only the local 3D scene. There is no backend, external telemetry feed, or hardware communication layer in this version.
 
 ## Planned separation
 
