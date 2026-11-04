@@ -1,12 +1,16 @@
-
+import DroneSimulator from "./simulation/DroneSimulator.jsx";
+import MissionPlanner from "./pages/MissionPlanner.jsx";
+import TelemetryPage from "./pages/TelemetryPage.jsx";
+import AssistantPage from "./pages/AssistantPage.jsx";
+import { SimulationTelemetryProvider } from "./context/SimulationTelemetryContext.jsx";
 import { useState } from "react";
 import {
   Activity, ArrowUpRight, BatteryCharging, Bell,
   ChevronDown, CircleHelp, Clock3, Compass,
-  Crosshair, Gauge, Layers3, MapPinned, Menu,
+  Crosshair, Gauge, Layers3, Map, MapPinned, Menu,
   MoreHorizontal, Navigation, Plane, Play,
-  Pause, RadioTower, Search, Settings2,
-  ShieldCheck, Signal, SlidersHorizontal,
+  RadioTower, Search, Settings2,
+  ShieldCheck, Signal,
   Thermometer, Wifi, Wind, Zap
 } from "lucide-react";
 
@@ -19,6 +23,7 @@ const navigation = [
   { label: "3D Simulator", icon: Crosshair },
   { label: "Flight Logs", icon: Clock3 },
   { label: "AI Assistant", icon: Zap },
+  { label: "Map", icon: Map },
 ];
 
 const metrics = [
@@ -26,7 +31,7 @@ const metrics = [
     label: "ALTITUDE",
     value: "124.8",
     unit: "m",
-    detail: "+4.2% vs previous",
+    detail: "Demo value · not live",
     icon: Navigation,
     color: "blue",
     points: "0,27 15,24 30,26 45,17 60,20 75,12 90,15 110,5 120,8"
@@ -35,7 +40,7 @@ const metrics = [
     label: "GROUND SPEED",
     value: "12.6",
     unit: "m/s",
-    detail: "Stable flight speed",
+    detail: "Demo value · not live",
     icon: Wind,
     color: "purple",
     points: "0,24 15,19 30,22 45,12 60,15 75,10 90,13 105,5 120,9"
@@ -44,7 +49,7 @@ const metrics = [
     label: "BATTERY",
     value: "84",
     unit: "%",
-    detail: "Estimated 28 min",
+    detail: "Demo value · not live",
     icon: BatteryCharging,
     color: "green",
     points: "0,7 15,8 30,9 45,11 60,13 75,15 90,16 105,19 120,21"
@@ -53,7 +58,7 @@ const metrics = [
     label: "SIGNAL STRENGTH",
     value: "98",
     unit: "%",
-    detail: "Connection excellent",
+    detail: "No aircraft connected",
     icon: Signal,
     color: "orange",
     points: "0,17 15,13 30,17 45,9 60,12 75,8 90,11 105,5 120,7"
@@ -89,25 +94,14 @@ function MetricCard({ metric }) {
 
 function App() {
   const [activeNav, setActiveNav] = useState("Overview");
-  const [simulationRunning, setSimulationRunning] = useState(false);
-  const [notice, setNotice] = useState("");
-
-  const toggleSimulation = () => {
-    setSimulationRunning((previous) => {
-      const next = !previous;
-      setNotice(next
-        ? "Simulation started successfully."
-        : "Simulation paused safely."
-      );
-      return next;
-    });
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
+    <SimulationTelemetryProvider>
     <div className="app-shell">
 
       {/* SIDEBAR */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${menuOpen ? "menu-open" : ""}`}>
         <div className="brand">
           <div className="brand-icon">
             <Plane size={23} />
@@ -130,13 +124,13 @@ function App() {
                 className={`nav-item ${
                   activeNav === item.label ? "active" : ""
                 }`}
-                onClick={() => setActiveNav(item.label)}
+                onClick={() => {
+                  setActiveNav(item.label);
+                  setMenuOpen(false);
+                }}
               >
                 <Icon size={18} />
                 <span>{item.label}</span>
-                {item.label === "AI Assistant" && (
-                  <span className="new-tag">NEW</span>
-                )}
               </button>
             );
           })}
@@ -146,18 +140,18 @@ function App() {
 
         <div className="connection-card">
           <div className="connection-heading">
-            <span className="online-dot" />
-            SYSTEM HEALTH
-            <span className="health-percent">98%</span>
+            <span className="offline-dot" />
+            DEMO MODE
+            <span className="offline-label">OFFLINE</span>
           </div>
-          <div className="health-track">
-            <div />
-          </div>
-          <p>All systems operational</p>
+          <p>No aircraft or telemetry source connected</p>
         </div>
 
-        <button className="nav-item settings-item"
-          onClick={() => setActiveNav("Settings")}>
+        <button className={`nav-item settings-item ${activeNav === "Settings" ? "active" : ""}`}
+          onClick={() => {
+            setActiveNav("Settings");
+            setMenuOpen(false);
+          }}>
           <Settings2 size={18} />
           <span>Settings</span>
         </button>
@@ -178,7 +172,12 @@ function App() {
         {/* HEADER */}
         <header className="topbar">
           <div className="breadcrumb">
-            <button className="mobile-menu">
+            <button
+              className="mobile-menu"
+              aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((open) => !open)}
+            >
               <Menu size={20} />
             </button>
             <span>Workspace</span>
@@ -189,24 +188,24 @@ function App() {
           <div className="topbar-actions">
             <div className="system-status">
               <span className="online-dot" />
-              SYSTEM ONLINE
+              SIMULATION DEMO
             </div>
 
-            <button className="icon-button" aria-label="Search">
+            <button className="icon-button" aria-label="Search" title="Search is not configured in this frontend." disabled>
               <Search size={18} />
             </button>
 
-            <button className="icon-button" aria-label="Notifications">
+            <button className="icon-button" aria-label="Notifications" title="No notification source is connected." disabled>
               <Bell size={18} />
             </button>
 
-            <button className="icon-button" aria-label="Help">
+            <button className="icon-button" aria-label="Help" title="Help content is not configured." disabled>
               <CircleHelp size={18} />
             </button>
 
             <div className="top-divider" />
 
-            <button className="operator-button">
+            <button className="operator-button" title="Operator accounts are not configured." disabled>
               <div className="avatar small">D</div>
               <ChevronDown size={15} />
             </button>
@@ -223,41 +222,74 @@ function App() {
                 COMMAND CENTER / V1.0
               </div>
 
-              <h1>
-                Flight <span>Overview.</span>
-              </h1>
-
-              <p className="welcome-description">
-                Monitor your aircraft, analyze telemetry
-                and manage flight operations.
-              </p>
+                  <h1>
+                  {activeNav === "3D Simulator" ? (
+                    <>3D Flight <span>Simulator.</span></>
+                  ) : activeNav === "Overview" ? (
+                    <>Flight <span>Overview.</span></>
+                  ) : (
+                    <>{activeNav}<span>.</span></>
+                  )}
+                </h1>
+             <p className="welcome-description">
+  {activeNav === "3D Simulator"
+    ? "Explore and control your virtual aircraft."
+    : activeNav === "Overview"
+      ? "Monitor the DRONE OS demo interface and launch the virtual flight simulator."
+      : `Open the ${activeNav.toLowerCase()} workspace.`}
+</p>
             </div>
-
             <div className="welcome-actions">
-              <button className="secondary-button">
-                <Clock3 size={16} />
-                Flight History
-              </button>
+  {activeNav === "3D Simulator" ? (
+    <button
+      className="secondary-button"
+      onClick={() => setActiveNav("Overview")}
+    >
+      <Gauge size={16} />
+      Back to Overview
+    </button>
+  ) : activeNav !== "Overview" ? (
+    <button className="secondary-button" onClick={() => setActiveNav("Overview")}>
+      <Gauge size={16} />
+      Back to Overview
+    </button>
+  ) : (
+    <>
+      <button className="secondary-button" onClick={() => setActiveNav("Flight Logs")}>
+        <Clock3 size={16} />
+        Flight History
+      </button>
 
-              <button className="primary-button"
-                onClick={toggleSimulation}>
-                {simulationRunning
-                  ? <Pause size={16} />
-                  : <Play size={16} />}
-                {simulationRunning
-                  ? "Pause Simulation"
-                  : "Start Simulation"}
-              </button>
-            </div>
+      <button className="primary-button" onClick={() => setActiveNav("3D Simulator")}>
+        <Play size={16} />
+        Launch Simulator
+      </button>
+    </>
+  )}
+</div>
+            
           </section>
-
-          {notice && (
-            <div className="notice">
-              <ShieldCheck size={16} />
-              {notice}
-              <button onClick={() => setNotice("")}>Dismiss</button>
-            </div>
+          {activeNav === "3D Simulator" && <DroneSimulator />}
+          {activeNav === "Mission Planner" && <MissionPlanner />}
+          {activeNav === "Live Telemetry" && <TelemetryPage />}
+          {activeNav === "AI Assistant" && <AssistantPage />}
+          {!["Overview", "3D Simulator", "Mission Planner", "Live Telemetry", "AI Assistant"].includes(activeNav) && (
+            <section className="panel module-placeholder">
+              <span className="simulator-eyebrow">MODULE NOT CONNECTED</span>
+              <h2>{activeNav}</h2>
+              <p>
+                This workspace is not implemented yet. No map tiles, flight records,
+                or persisted settings are available in this frontend.
+              </p>
+              <span>Backend status: unavailable · Hardware control: disabled</span>
+            </section>
           )}
+          {activeNav === "Overview" && (
+            <>
+          <div className="demo-banner" role="status">
+            <ShieldCheck size={16} />
+            DEMO DATA ONLY — values below are illustrative and are not measurements from an aircraft.
+          </div>
 
           {/* STAT CARDS */}
           <section className="metrics-grid">
@@ -280,7 +312,7 @@ function App() {
                   <p>Simulated aircraft position</p>
                 </div>
 
-                <button className="icon-button">
+                <button className="icon-button" aria-label="Map controls unavailable" title="Overview map is a static demo preview." disabled>
                   <MoreHorizontal size={19} />
                 </button>
               </div>
@@ -326,9 +358,9 @@ function App() {
                 </div>
 
                 <div className="map-zoom">
-                  <button>+</button>
-                  <button>−</button>
-                  <button><Layers3 size={16} /></button>
+                  <button disabled title="Zoom is unavailable in the static demo preview.">+</button>
+                  <button disabled title="Zoom is unavailable in the static demo preview.">−</button>
+                  <button disabled title="Map layers are unavailable in the static demo preview."><Layers3 size={16} /></button>
                 </div>
 
                 <div className="map-label">
@@ -350,7 +382,7 @@ function App() {
                   <span className="footer-label">WAYPOINTS</span>
                   <strong>03 <small>/ 08</small></strong>
                 </div>
-                <button className="map-action">
+                <button className="map-action" onClick={() => setActiveNav("Mission Planner")}>
                   Mission details <ArrowUpRight size={15} />
                 </button>
               </div>
@@ -368,7 +400,7 @@ function App() {
                 </div>
                 <span className="status-pill">
                   <span className="online-dot" />
-                  ONLINE
+                  SIMULATED
                 </span>
               </div>
 
@@ -394,7 +426,7 @@ function App() {
                 </div>
                 <div>
                   <span>CONNECTION</span>
-                  <strong className="green-text">CONNECTED</strong>
+                  <strong>NOT CONNECTED</strong>
                 </div>
               </div>
 
@@ -426,11 +458,11 @@ function App() {
                 <div>
                   <div className="panel-title">
                     <Activity size={17} />
-                    Flight Activity
+                    Demo Status
                   </div>
-                  <p>Recent system events</p>
+                  <p>Current frontend capabilities</p>
                 </div>
-                <button className="text-button">View all</button>
+                <button className="text-button" onClick={() => setActiveNav("Flight Logs")}>View all</button>
               </div>
 
               <div className="activity-list">
@@ -439,10 +471,10 @@ function App() {
                     <ShieldCheck size={16} />
                   </div>
                   <div className="activity-text">
-                    <strong>System diagnostics passed</strong>
-                    <span>All flight systems operational</span>
+                    <strong>Simulation-only mode</strong>
+                    <span>No physical aircraft connection is implemented</span>
                   </div>
-                  <time>09:42 AM</time>
+                  <time>LOCAL</time>
                 </div>
 
                 <div className="activity-row">
@@ -450,10 +482,10 @@ function App() {
                     <RadioTower size={16} />
                   </div>
                   <div className="activity-text">
-                    <strong>Telemetry connection established</strong>
-                    <span>Vehicle data link connected</span>
+                    <strong>Telemetry source</strong>
+                    <span>Only local simulator samples are available</span>
                   </div>
-                  <time>09:38 AM</time>
+                  <time>SIM</time>
                 </div>
 
                 <div className="activity-row">
@@ -461,10 +493,10 @@ function App() {
                     <MapPinned size={16} />
                   </div>
                   <div className="activity-text">
-                    <strong>Mission route loaded</strong>
-                    <span>8 waypoints configured</span>
+                    <strong>Mission storage</strong>
+                    <span>Missions are saved in this browser only</span>
                   </div>
-                  <time>09:31 AM</time>
+                  <time>LOCAL</time>
                 </div>
               </div>
             </div>
@@ -526,10 +558,12 @@ function App() {
               SIMULATION / NO HARDWARE CONTROL
             </span>
           </footer>
-
+            </>
+          )}
         </div>
       </main>
     </div>
+    </SimulationTelemetryProvider>
   );
 }
 

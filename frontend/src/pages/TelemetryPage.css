@@ -1,0 +1,167 @@
+.telemetry-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.telemetry-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.telemetry-heading h2 {
+  margin: 8px 0 6px;
+  color: #e8f3ff;
+  font-size: 24px;
+}
+
+.telemetry-heading p,
+.telemetry-chart > p {
+  margin: 0;
+  color: #8295aa;
+  font-size: 10px;
+}
+
+.telemetry-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid #28513f;
+  border-radius: 20px;
+  color: #75d9ac;
+  background: #122a21;
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: .7px;
+  white-space: nowrap;
+}
+
+.telemetry-source i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #55d8a4;
+}
+
+.telemetry-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.telemetry-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 14px;
+}
+
+.telemetry-card > svg {
+  color: #62cfff;
+}
+
+.telemetry-card > span {
+  color: #8295aa;
+  font-size: 8px;
+  letter-spacing: .6px;
+}
+
+.telemetry-card > strong {
+  color: #e4f0fb;
+  font-size: 22px;
+}
+
+.telemetry-card small {
+  margin-left: 4px;
+  color: #8ca0b4;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.telemetry-card p {
+  margin: 0;
+  color: #8195aa;
+  font-size: 8px;
+}
+
+.telemetry-chart-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(250px, 1fr);
+  gap: 14px;
+}
+
+.telemetry-chart,
+.telemetry-health {
+  min-height: 190px;
+  padding: 16px;
+}
+
+.telemetry-chart > p {
+  margin-top: 7px;
+}
+
+.telemetry-chart svg {
+  display: block;
+  width: 100%;
+  height: 110px;
+  margin-top: 12px;
+  overflow: visible;
+}
+
+.telemetry-chart polyline {
+  fill: none;
+  stroke: #59cfff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.telemetry-chart-empty {
+  display: grid;
+  min-height: 110px;
+  place-items: center;
+  color: #8195aa;
+  font-size: 9px;
+  text-align: center;
+}
+
+.telemetry-health dl {
+  margin: 12px 0 0;
+}
+
+.telemetry-health dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid #203247;
+  font-size: 9px;
+}
+
+.telemetry-health dt {
+  color: #8ca0b5;
+}
+
+.telemetry-health dd {
+  margin: 0;
+  color: #cfe1ef;
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .telemetry-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .telemetry-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
